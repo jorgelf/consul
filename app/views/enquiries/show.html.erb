@@ -47,15 +47,8 @@
   </div>
 </div>
 
-<div class="row margin-top text-center">
-  <div class="enquiries-buttons">
-    <div class="small-12 medium-6 large-3 large-offset-3 column">
-      <%= link_to t("enquiries.show.button_yes"), "#", class: "button expanded success" %>
-    </div>
-    <div class="small-12 medium-6 large-3 end column">
-      <%= link_to t("enquiries.show.button_no"), "#", class: "button expanded alert" %>
-    </div>
-  </div>
+<div class="row margin-top text-center" id="<%= dom_id(@enquiry) %>_answers">
+  <%= render "enquiries/answers", enquiry: @enquiry %>
 </div>
 
 <div class="row margin-top">

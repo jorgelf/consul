@@ -356,6 +356,7 @@ FactoryGirl.define do
     sequence(:question) { |n| "Enquiry question #{n}" }
     open_at { 1.month.ago }
     closed_at { 1.month.from_now }
+    valid_answers { Faker::Lorem.words(3).join(', ') }
 
     trait :incoming do
       open_at { 2.days.from_now }
@@ -366,5 +367,10 @@ FactoryGirl.define do
       open_at { 1.month.ago }
       closed_at { 15.days.ago }
     end
+  end
+
+  factory :enquiry_answer, class: 'Enquiry::Answer' do
+    association :author, factory: :user
+    enquiry
   end
 end

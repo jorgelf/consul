@@ -388,6 +388,7 @@ en:
       back: "Go back to my activity"
   enquiries:
     create_enquiry: "Create enquiry"
+    default_valid_answers: "Yes, No"
     index:
       filters:
         opened: "Open"
@@ -406,8 +407,14 @@ en:
       dates: "From %{open_at} to %{closed_at}"
       external_url: "Additional documentation"
       more_info: "More information"
-      button_yes: "Yes"
-      button_no: "No"
+      not_logged_in: "You must %{signin} or %{signup} to participate."
+      signin: Sign in
+      signup: Sign up
+      cant_answer_verify_html: "You must %{verify_link} in order to answer."
+      verify_link: "verify your account"
+      cant_answer_incoming: "This enquiry has not yet started."
+      cant_answer_expired: "This enquiry has finished."
+      cant_answer_wrong_geozone: "This enquiry is not available on your geozone."
     banner:
       featured_title: "#NextVoting"
       info: "New proposals that have reached the voting phase."

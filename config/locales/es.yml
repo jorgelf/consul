@@ -388,6 +388,7 @@ es:
       back: "Volver a mi actividad"
   enquiries:
     create_enquiry: "Crear votación"
+    default_valid_answers: "Sí, No"
     index:
       filters:
         opened: "Abiertas"
@@ -406,8 +407,14 @@ es:
       dates: "Desde el %{open_at} hasta el %{closed_at}"
       external_url: "Documentación adicional"
       more_info: "Más información"
-      button_yes: "Sí"
-      button_no: "No"
+      not_logged_in: "Necesitas %{signin} o %{signup} para participar."
+      signin: iniciar sesión
+      signup: registrarte
+      cant_answer_verify_html: "Por favor %{verify_link} para poder responder."
+      verify_link: "verifica tu cuenta"
+      cant_answer_incoming: "Esta votación todavía no ha comenzado."
+      cant_answer_expired: "Esta votación ha terminado."
+      cant_answer_wrong_geozone: "Esta votación no está disponible en tu zona."
     banner:
       featured_title: "#PróximaVotación"
       info: "Nuevas propuestas ciudadanas han llegado a la fase de votación."
