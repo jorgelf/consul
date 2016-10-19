@@ -1232,5 +1232,11 @@
     font-size: rem-calc(24);
     font-weight: bold;
     margin-right: $line-height/2;
+
+    &.hollow.secondary:hover {
+      background: $info-bg;
+      border: 1px solid $info-border;
+      color: $color-info;
+    }
   }
 }

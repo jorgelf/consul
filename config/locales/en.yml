@@ -415,6 +415,8 @@ en:
       cant_answer_incoming: "This enquiry has not yet started."
       cant_answer_expired: "This enquiry has finished."
       cant_answer_wrong_geozone: "This enquiry is not available on your geozone."
+      vote_answer: "Vote %{answer}"
+      voted: "You have voted %{answer}"
     banner:
       featured_title: "#NextVoting"
       info: "New proposals that have reached the voting phase."

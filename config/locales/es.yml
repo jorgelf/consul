@@ -415,6 +415,8 @@ es:
       cant_answer_incoming: "Esta votación todavía no ha comenzado."
       cant_answer_expired: "Esta votación ha terminado."
       cant_answer_wrong_geozone: "Esta votación no está disponible en tu zona."
+      vote_answer: "Votar %{answer}"
+      voted: "Has votado %{answer}"
     banner:
       featured_title: "#PróximaVotación"
       info: "Nuevas propuestas ciudadanas han llegado a la fase de votación."
