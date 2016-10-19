@@ -4,7 +4,7 @@ class EnquiriesController < ApplicationController
   has_filters %w{opened expired incoming}
   has_orders %w{most_voted newest oldest}, only: :show
 
-  VALID_TABS = %w{answers results tracing}
+  VALID_TABS = %w{comments results tracing}
 
   def index
     @enquiries = @enquiries.send(@current_filter).sort_for_list.for_render.page(params[:page])
