@@ -47,17 +47,41 @@
   </div>
 </div>
 
-<div class="row margin-top text-center" id="<%= dom_id(@enquiry) %>_answers">
-  <%= render "enquiries/answers", enquiry: @enquiry %>
-</div>
-
-<div class="row margin-top">
-  <div class="small-12 medium-9 column">
-    <h3><%= t('enquiries.show.more_info') %></h3>
-    <%= @enquiry.description %>
+<div class="row">
+  <div class="small-12 column">
+    <% if @enquiry.expired? %>
+      <div class="tabs-content" data-tabs-content="enquiry-tabs">
+        <div class="row">
+          <div class="small-12 column">
+            <ul class="tabs" data-tabs id="enquiry-tabs">
+              <% @valid_tabs.each_with_index do |tab, index| %>
+                <li class="tabs-title <%= "is-active" if index == 0 %>">
+                  <%= link_to "#tab-#{tab}" do %>
+                    <h2><%= t("enquiries.show.#{tab}") %></h2>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
+        <% @valid_tabs.each do |tab| %>
+          <div class="tabs-panel" id="tab-#{tab}">
+            <div class="row">
+              <div class="small-12 column">
+                <%= render "#{tab}_tab" %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <%= render 'answers_tab' %>
+    <% end %>
   </div>
 </div>
 
-
-<%= render "enquiries/comments" %>
-
+<div class="row">
+  <div class="small-12 column">
+    <%= render "enquiries/comments" %>
+  </div>
+</div>

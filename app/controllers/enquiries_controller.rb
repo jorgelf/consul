@@ -4,11 +4,16 @@ class EnquiriesController < ApplicationController
   has_filters %w{opened expired incoming}
   has_orders %w{most_voted newest oldest}, only: :show
 
+  VALID_TABS = %w{answers results tracing}
+
   def index
     @enquiries = @enquiries.send(@current_filter).sort_for_list.for_render.page(params[:page])
   end
 
   def show
+    @valid_tabs = VALID_TABS
+    @tab = @valid_tabs.include?(params[:tab]) ? params[:tab] : @valid_tabs.first
+
     @commentable = @enquiry.proposal.present? ? @enquiry.proposal : @enquiry
     @comment_tree = CommentTree.new(@commentable, params[:page], @current_order)
     set_comment_flags(@comment_tree.comments)

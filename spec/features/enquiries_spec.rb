@@ -155,4 +155,21 @@ feature 'Enquiries' do
 
   end
 
+  context 'Results' do
+    let(:geozone) { create(:geozone) }
+
+    scenario 'Open & incoming enquiries have no result tab' do
+      enquiry = create(:enquiry)
+      visit enquiry_path(enquiry)
+      expect(page).to_not have_link('Answers')
+      expect(page).to_not have_link('Results')
+      expect(page).to_not have_link('Tracing')
+
+      incoming_enquiry = create(:enquiry, :incoming)
+      visit enquiry_path(incoming_enquiry)
+      expect(page).to_not have_link('Answers')
+      expect(page).to_not have_link('Results')
+      expect(page).to_not have_link('Tracing')
+    end
+  end
 end
