@@ -182,4 +182,9 @@ class Proposal < ActiveRecord::Base
       end
     end
 
+  private
+
+    def create_proposal_in_emapic
+      EmapicApi.create_proposal
+    end
 end

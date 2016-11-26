@@ -19,6 +19,20 @@ class EmapicApi
     print_debug_end(response.code)
   end
 
+  def self.create_proposal
+    print_debug_start("to create a new proposal")
+
+    uri = build_uri('/api/test')
+    http = build_http_object(uri)
+    request = Net::HTTP::Post.new(uri)
+    request.basic_auth(EMAPIC_USER, EMAPIC_PASS)
+    # request.set_form_data('id': 1, 'title': 'A new proposal')
+
+    response = http.request(request)
+
+    print_debug_end(response.code)
+  end
+
   # Example: '/api/survey/50ibWU/totals/countries'
   def self.build_uri(path)
     URI::HTTP.build(host: HOST, path: path, port: PORT)
