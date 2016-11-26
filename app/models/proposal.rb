@@ -36,6 +36,8 @@ class Proposal < ActiveRecord::Base
 
   before_save :calculate_hot_score, :calculate_confidence_score
 
+  after_create :create_proposal_in_emapic
+
   scope :for_render,               -> { includes(:tags) }
   scope :sort_by_hot_score ,       -> { reorder(hot_score: :desc) }
   scope :sort_by_confidence_score, -> { reorder(confidence_score: :desc) }
@@ -125,6 +127,7 @@ class Proposal < ActiveRecord::Base
   def register_vote(user, vote_value)
     if votable_by?(user) && !archived?
       vote_by(voter: user, vote: vote_value)
+      EmapicApi.register_vote
     end
   end
 

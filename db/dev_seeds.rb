@@ -358,3 +358,45 @@ Proposal.last(3).each do |proposal|
                           created_at: rand((Time.now - 1.week) .. Time.now))
   puts "    #{banner.title}"
 end
+
+# ==============================================================================
+
+=begin
+puts "Seeding for EMAPIC..."
+
+def seed_emapic_request(user_id, district, votable_id)
+  puts "Sending request to EMAPIC API with (user_id: #{user_id}, district: #{district}, votable_id: #{votable_id})"
+
+  uri = URI::HTTP.build(host: 'emapic', path: '/api/survey/50ibWU/totals/countries', port: 3000)
+  http = Net::HTTP.new(uri.host, uri.port)
+
+  http.use_ssl = true
+  http.verify_mode = OpenSSL::SSL::VERIFY_NONE # read into this
+
+  data = http.get(uri.request_uri)
+
+  puts "Response code: #{data.code}"
+end
+
+# Create example verified users with a district assigned so we can show them
+# in EMAPIC
+
+(1..10).each do |i|
+  user = create_user("emapic_user_#{i}@consul.dev")
+  user.update(
+    residence_verified_at: Time.now,
+    confirmed_phone: Faker::PhoneNumber.phone_number,
+    document_type: "1",
+    verified_at: Time.now,
+    document_number: "3333333" + sprintf('%02d', i),
+    geozone: Geozone.reorder("RANDOM()").first
+  )
+  # Make this user vote some proposals
+  (1..5).each do
+    # TODO: que un usuario no vote una propuesta más de una vez
+    proposal = Proposal.reorder("RANDOM()").first
+    proposal.vote_by(voter: user, vote: true)
+    seed_emapic_request(user.id, user.geozone.name, proposal.id)
+  end
+end
+=end
