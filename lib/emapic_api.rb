@@ -2,7 +2,7 @@ require 'net/http'
 require 'openssl'
 
 class EmapicApi
-  HOST = 'emapic'
+  HOST = '127.0.0.1'
   PORT = 3000
   EMAPIC_USER = 4
   EMAPIC_PASS = 4
@@ -29,7 +29,22 @@ class EmapicApi
     end
   end
 
-  def self.register_vote
+  def self.get_random_address
+    print_debug_start("to get the address")
+
+    uri = build_uri('/api/randomMadrid')
+    http = build_http_object(uri)
+    request = Net::HTTP::Get.new(uri)
+
+    response = http.request(request)
+
+    puts "Address: #{JSON.parse(response.body)['display_name']}"
+    print_debug_end(response.code)
+
+    return JSON.parse(response.body)['display_name']
+  end
+
+  def self.register_location
     print_debug_start("to register a vote")
 
     uri = build_uri('/api/test')
@@ -42,14 +57,44 @@ class EmapicApi
     print_debug_end(response.code)
   end
 
-  def self.create_proposal
-    print_debug_start("to create a new proposal")
+  def self.register_random_location(group_id, user_id)
+    print_debug_start("to register a vote with a random address")
 
-    uri = build_uri('/api/test')
+    uri = build_uri('/api/locationgroup/' + group_id)
     http = build_http_object(uri)
     request = Net::HTTP::Post.new(uri)
     request.basic_auth(EMAPIC_USER, EMAPIC_PASS)
-    # request.set_form_data('id': 1, 'title': 'A new proposal')
+    request.set_form_data('usr_id': user_id, 'address': get_random_address)
+
+    response = http.request(request)
+
+    print_debug_end(response.code)
+  end
+
+  def self.get_locations(id)
+    print_debug_start("to get the locations JSON")
+
+    uri = build_uri('/api/locationgroup/' + id)
+    http = build_http_object(uri)
+    request = Net::HTTP::Get.new(uri)
+    request.basic_auth(EMAPIC_USER, EMAPIC_PASS)
+
+    response = http.request(request)
+
+    puts "Response body: #{response.body}"
+    print_debug_end(response.code)
+
+    return response.body
+  end
+
+  def self.create_location_group(id, title)
+    print_debug_start("to create a new proposal")
+
+    uri = build_uri('/api/locationgroup')
+    http = build_http_object(uri)
+    request = Net::HTTP::Post.new(uri)
+    request.basic_auth(EMAPIC_USER, EMAPIC_PASS)
+    request.set_form_data('id': id, 'title': title)
 
     response = http.request(request)
 

@@ -127,7 +127,7 @@ class Proposal < ActiveRecord::Base
   def register_vote(user, vote_value)
     if votable_by?(user) && !archived?
       vote_by(voter: user, vote: vote_value)
-      EmapicApi.register_vote
+      EmapicApi.register_random_location('proposal_' + self.id.to_s, user.id.to_s)
     end
   end
 
@@ -185,6 +185,6 @@ class Proposal < ActiveRecord::Base
   private
 
     def create_proposal_in_emapic
-      EmapicApi.create_proposal
+      EmapicApi.create_location_group('proposal_' + self.id.to_s, self.title)
     end
 end

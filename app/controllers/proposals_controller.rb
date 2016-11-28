@@ -22,8 +22,12 @@ class ProposalsController < ApplicationController
   def show
     super
     @notifications = @proposal.notifications
-    @geojson_data = EmapicApi.get_json(fake_data: true)
     redirect_to proposal_path(@proposal), status: :moved_permanently if request.path != proposal_path(@proposal)
+  end
+
+  def map_indiv_votes
+    geojson_data = EmapicApi.get_locations('proposal_' + @proposal.id.to_s)
+    render :json => geojson_data
   end
 
   def index_customization
