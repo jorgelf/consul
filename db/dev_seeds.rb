@@ -80,7 +80,10 @@ end
 
 (1..40).each do |i|
   user = create_user("user#{i}@consul.dev")
-  level = [1, 2, 3].sample
+  # ----- Modified for emapic-consul deployment demo ---------------------------
+  # level = [1, 2, 3].sample
+  level = [3].sample
+  # ----------------------------------------------------------------------------
   if level >= 2
     user.update(residence_verified_at: Time.now, confirmed_phone: Faker::PhoneNumber.phone_number, document_number: Faker::Number.number(10), document_type: "1" )
   end
@@ -145,7 +148,7 @@ end
 puts "Creating Proposals"
 
 tags = Faker::Lorem.words(25)
-(1..30).each do |i|
+(1..12).each do |i|
   author = User.reorder("RANDOM()").first
   description = "<p>#{Faker::Lorem.paragraphs.join('</p><p>')}</p>"
   proposal = Proposal.create!(author: author,
@@ -257,10 +260,13 @@ end
   comment.vote_by(voter: voter, vote: vote)
 end
 
-(1..100).each do
+(1..250).each do
   voter  = User.level_two_or_three_verified.reorder("RANDOM()").first
   proposal = Proposal.reorder("RANDOM()").first
   proposal.vote_by(voter: voter, vote: true)
+  # ----- Modified for emapic-consul deployment demo ---------------------------
+  EmapicApi.register_random_location('proposal_' + proposal.id.to_s, voter.id.to_s)
+  # ----------------------------------------------------------------------------
 end
 
 
