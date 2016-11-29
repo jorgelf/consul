@@ -8,7 +8,7 @@ class ProposalsController < ApplicationController
   before_action :set_search_order, only: :index
   before_action :load_categories, only: [:index, :new, :edit, :map, :summary]
   before_action :load_geozones, only: [:edit, :map, :summary]
-  before_action :authenticate_user!, except: [:index, :show, :map, :summary]
+  before_action :authenticate_user!, except: [:index, :show, :map, :map_indiv_votes, :summary]
 
   invisible_captcha only: [:create, :update], honeypot: :subtitle
 

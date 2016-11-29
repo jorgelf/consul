@@ -102,7 +102,7 @@
 
         <div class="row">
           <div class="small-12 medium-12 column">
-            <div id="mapid" style="height: 400px; width: 100%;"></div>
+            <div id="mapid" style="height: 400px; width: 100%; display: none;"></div>
           </div>
         </div>
       </div>
@@ -151,29 +151,52 @@
 </div>
 
 <script>
+
+    var map,
+        indivLayer;
+
     function loadIndivLayer() {
-        $.getJSON('map_indiv_votes', function(data) {
-            indivLayer.addData(data);
-            if (indivLayer.getLayers().length === 0) {
-              map.setView([40.4167, -3.7037], 13);
-            } else {
-              map.fitBounds(indivLayer.getBounds(),
-              {
-                  padding: [10, 10]
-              });
+        $.getJSON('<%= map_indiv_votes_proposal_path(@proposal) %>', function(data) {
+            if (data.status != 'error') {
+              indivLayer.addData(data);
+              if (indivLayer.getLayers().length === 0) {
+                map.setView([40.4167, -3.7037], 13);
+              } else {
+                $('#mapid').show();
+                map.fitBounds(indivLayer.getBounds(),
+                {
+                    padding: [10, 10]
+                });
+              }
             }
         });
     }
 
-  var map = L.map('mapid', { scrollWheelZoom: false });
-  L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19
-  }).addTo(map);
+    function createMap() {
 
-  var indivLayer = L.geoJSON().addTo(map);
+      var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+          landMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
 
-  $(function() {
+      map = L.map('mapid', {
+  	    layers: [osmMap], // only add one!
+        scrollWheelZoom: false,
+        maxZoom: 18,
+        minZoom: 8
+      });
+
+    	var baseLayers = {
+    		"OSM Mapnik": osmMap,
+    		"Landscape": landMap
+    	};
+
+    	L.control.layers(baseLayers).addTo(map);
+
+      indivLayer = L.geoJSON().addTo(map);
+    }
+
+    $(function() {
+      createMap();
       loadIndivLayer();
-  });
+    });
 
 </script>
