@@ -52,9 +52,6 @@ Rails.application.routes.draw do
       put :flag
       put :unflag
       get :retire_form
-      get :map_indiv_votes
-      get :map_barrios_votes
-      get :map_distritos_votes
       patch :retire
     end
     collection do

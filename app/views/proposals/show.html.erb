@@ -165,74 +165,75 @@
           minZoom: 8
         });
 
-
     function loadIndivLayer() {
-      $.getJSON('<%= map_indiv_votes_proposal_path(@proposal) %>', function(data) {
-          if (data.status != 'error') {
-            indivLayer.addData(data);
-            if (indivLayer.getLayers().length === 0) {
-              map.setView([40.4167, -3.7037], 13);
-            } else {
-              $('#mapid').show();
-              map.fitBounds(indivLayer.getBounds(),
-              {
-                  padding: [10, 10]
-              });
-            }
+        $.getScript("<%= EmapicApi.create_get_proposal_indiv_votes_url(@proposal) %>?callback=addIndivLayer");
+    }
+
+    function addIndivLayer(data) {
+        if (data.status != 'error') {
+          indivLayer.addData(data);
+          if (indivLayer.getLayers().length === 0) {
+            map.setView([40.4167, -3.7037], 13);
+          } else {
+            $('#mapid').show();
+            map.fitBounds(indivLayer.getBounds(),
+            {
+                padding: [10, 10]
+            });
           }
-      });
+        }
     }
 
     function loadBarriosLayer() {
-      console.log('barrios...');
-      $.getJSON('<%= map_barrios_votes_proposal_path(@proposal) %>', function(data) {
-          console.log(data);
-          if (data.status != 'error') {
-            barriosLayer.addData(data);
-            if (barriosLayer.getLayers().length === 0) {
-              map.setView([40.4167, -3.7037], 13);
-            } else {
-              $('#mapid').show();
-              map.fitBounds(barriosLayer.getBounds(),
-              {
-                  padding: [10, 10]
-              });
-            }
-          }
-      });
+        $.getScript("<%= EmapicApi.create_get_proposal_barrios_votes_url(@proposal) %>?callback=addBarriosLayer");
+    }
+
+    function addBarriosLayer(data) {
+      if (data.status != 'error') {
+        barriosLayer.addData(data);
+        if (barriosLayer.getLayers().length === 0) {
+          map.setView([40.4167, -3.7037], 13);
+        } else {
+          $('#mapid').show();
+          map.fitBounds(barriosLayer.getBounds(),
+          {
+              padding: [10, 10]
+          });
+        }
+      }
     }
 
     function loadDistritosLayer() {
-      console.log('distritos...');
-      $.getJSON('<%= map_distritos_votes_proposal_path(@proposal) %>', function(data) {
-          console.log(data);
-          if (data.status != 'error') {
-            distritosLayer.addData(data);
-            if (distritosLayer.getLayers().length === 0) {
-              map.setView([40.4167, -3.7037], 13);
-            } else {
-              $('#mapid').show();
-              map.fitBounds(distritosLayer.getBounds(),
-              {
-                  padding: [10, 10]
-              });
-            }
-          }
-      });
+        $.getScript("<%= EmapicApi.create_get_proposal_distritos_votes_url(@proposal) %>?callback=addDistritosLayer");
+    }
+
+    function addDistritosLayer(data) {
+      if (data.status != 'error') {
+        distritosLayer.addData(data);
+        if (distritosLayer.getLayers().length === 0) {
+          map.setView([40.4167, -3.7037], 13);
+        } else {
+          $('#mapid').show();
+          map.fitBounds(distritosLayer.getBounds(),
+          {
+              padding: [10, 10]
+          });
+        }
+      }
     }
 
 
     function createMap() {
 
-    	var baseLayers = {
-    		"OSM Mapnik": osmMap,
-    		"Landscape": landMap
-    	};
+      var baseLayers = {
+    	"OSM Mapnik": osmMap,
+    	"Landscape": landMap
+      };
 
       var overlayMaps = {
-          "Individuales": indivLayer,
-          "Barrios": barriosLayer,
-          "Distritos": distritosLayer,
+        "Individuales": indivLayer,
+        "Barrios": barriosLayer,
+        "Distritos": distritosLayer,
       };
 
     	L.control.layers(baseLayers,overlayMaps).addTo(map);
