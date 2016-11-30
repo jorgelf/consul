@@ -1,2 +1,2 @@
 $("#<%= dom_id(@proposal) %>_votes").html('<%= j render("proposals/votes", proposal: @proposal) %>');
-loadIndivLayer();
+emapic && emapic.reloadAllEmapicMaps && emapic.reloadAllEmapicMaps();

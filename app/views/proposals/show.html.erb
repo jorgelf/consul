@@ -102,7 +102,7 @@
 
         <div class="row">
           <div class="small-12 medium-12 column">
-            <div id="mapid" style="height: 400px; width: 100%; display: none;"></div>
+            <div class="emapic-map location-group" emapic-login="<%= Rails.application.secrets.emapic_login %>" emapic-location-group-id="proposal_<%= @proposal.id.to_s %>" style="height: 400px; width: 100%; display: none;"></div>
           </div>
         </div>
       </div>
@@ -150,100 +150,4 @@
   </div>
 </div>
 
-<script>
-
-
-    var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
-        landMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
-        indivLayer = L.geoJSON();
-        barriosLayer = L.geoJSON(),
-        distritosLayer = L.geoJSON(),
-        map = L.map('mapid', {
-          layers: [osmMap,indivLayer], // only add one!
-          scrollWheelZoom: false,
-          maxZoom: 18,
-          minZoom: 8
-        });
-
-    function loadIndivLayer() {
-        $.getScript("<%= EmapicApi.create_get_proposal_indiv_votes_url(@proposal) %>?callback=addIndivLayer");
-    }
-
-    function addIndivLayer(data) {
-        if (data.status != 'error') {
-          indivLayer.addData(data);
-          if (indivLayer.getLayers().length === 0) {
-            map.setView([40.4167, -3.7037], 13);
-          } else {
-            $('#mapid').show();
-            map.fitBounds(indivLayer.getBounds(),
-            {
-                padding: [10, 10]
-            });
-          }
-        }
-    }
-
-    function loadBarriosLayer() {
-        $.getScript("<%= EmapicApi.create_get_proposal_barrios_votes_url(@proposal) %>?callback=addBarriosLayer");
-    }
-
-    function addBarriosLayer(data) {
-      if (data.status != 'error') {
-        barriosLayer.addData(data);
-        if (barriosLayer.getLayers().length === 0) {
-          map.setView([40.4167, -3.7037], 13);
-        } else {
-          $('#mapid').show();
-          map.fitBounds(barriosLayer.getBounds(),
-          {
-              padding: [10, 10]
-          });
-        }
-      }
-    }
-
-    function loadDistritosLayer() {
-        $.getScript("<%= EmapicApi.create_get_proposal_distritos_votes_url(@proposal) %>?callback=addDistritosLayer");
-    }
-
-    function addDistritosLayer(data) {
-      if (data.status != 'error') {
-        distritosLayer.addData(data);
-        if (distritosLayer.getLayers().length === 0) {
-          map.setView([40.4167, -3.7037], 13);
-        } else {
-          $('#mapid').show();
-          map.fitBounds(distritosLayer.getBounds(),
-          {
-              padding: [10, 10]
-          });
-        }
-      }
-    }
-
-
-    function createMap() {
-
-      var baseLayers = {
-    	"OSM Mapnik": osmMap,
-    	"Landscape": landMap
-      };
-
-      var overlayMaps = {
-        "Individuales": indivLayer,
-        "Barrios": barriosLayer,
-        "Distritos": distritosLayer,
-      };
-
-    	L.control.layers(baseLayers,overlayMaps).addTo(map);
-    }
-
-    $(function() {
-      createMap();
-      loadIndivLayer();
-      loadBarriosLayer();
-      loadDistritosLayer();
-    });
-
-</script>
+<script src="<%= Rails.application.secrets.emapic_url %>/javascripts/emapic_remote_loading.js" type="text/javascript"></script>

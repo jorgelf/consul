@@ -21,10 +21,10 @@ class EmapicApi
   def self.register_random_location(group_id, user_id)
     print_debug_start("to register a vote with a random address")
 
-    uri = build_uri('/api/locationgroup/' + api_login + '/'  + group_id)
+    uri = build_uri('/api/locationgroup/' + emapic_login + '/'  + group_id)
     http = build_http_object(uri)
     request = Net::HTTP::Post.new(uri)
-    request.basic_auth(api_key, api_secret)
+    request.basic_auth(emapic_api_key, emapic_api_secret)
     request.set_form_data('usr_id': user_id, 'address': get_random_address)
 
     response = http.request(request)
@@ -32,59 +32,13 @@ class EmapicApi
     print_debug_end(response.code)
   end
 
-  def self.get_locations(id)
-    print_debug_start("to get the locations JSON")
-
-    uri = build_uri('/api/locationgroup/' + api_login + '/' + id)
-    http = build_http_object(uri)
-    request = Net::HTTP::Get.new(uri)
-
-    response = http.request(request)
-
-    puts "Response body: #{response.body}"
-    print_debug_end(response.code)
-
-    return response.body
-  end
-
-  def self.get_barrios(id)
-    print_debug_start("to get the barrios JSON")
-
-    uri = build_uri('/api/locationgroup/' + api_login + '/'  + id + '/totals/madrid_barrios')
-    http = build_http_object(uri)
-    request = Net::HTTP::Get.new(uri)
-
-    response = http.request(request)
-
-    puts "Response body: #{response.body}"
-    print_debug_end(response.code)
-
-    return response.body
-  end
-
-  def self.get_distritos(id)
-    print_debug_start("to get the distritos JSON")
-
-    uri = build_uri('/api/locationgroup/' + api_login + '/'  + id + '/totals/madrid_distritos')
-    http = build_http_object(uri)
-    puts "#{uri}"
-    request = Net::HTTP::Get.new(uri)
-
-    response = http.request(request)
-
-    ## puts "Response body: #{response.body}"
-    print_debug_end(response.code)
-
-    return response.body
-  end
-
   def self.create_location_group(id, title)
     print_debug_start("to create a new proposal")
 
-    uri = build_uri('/api/locationgroup/' + api_login)
+    uri = build_uri('/api/locationgroup/' + emapic_login)
     http = build_http_object(uri)
     request = Net::HTTP::Post.new(uri)
-    request.basic_auth(api_key, api_secret)
+    request.basic_auth(emapic_api_key, emapic_api_secret)
     request.set_form_data('id': id, 'title': title)
 
     response = http.request(request)
@@ -92,23 +46,10 @@ class EmapicApi
     print_debug_end(response.code)
   end
 
-  def self.create_get_proposal_indiv_votes_url(proposal)
-    return self.create_get_indiv_votes_url('proposal_' + proposal.id.to_s)
-  end
-
-  def self.create_get_proposal_barrios_votes_url(proposal)
-    return self.create_get_barrios_votes_url('proposal_' + proposal.id.to_s)
-  end
-
-  def self.create_get_proposal_distritos_votes_url(proposal)
-    return self.create_get_distritos_votes_url('proposal_' + proposal.id.to_s)
-  end
-
   private
 
-    # Example: '/api/survey/50ibWU/totals/countries'
     def self.build_uri(path)
-      URI::HTTPS.build(host: api_host, path: path, port: api_port)
+      URI(emapic_url + path)
     end
 
     def self.build_http_object(uri)
@@ -116,21 +57,6 @@ class EmapicApi
       http.use_ssl = true
       http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       http
-    end
-
-    def self.create_get_indiv_votes_url(id)
-      uri = build_uri('/api/locationgroup/' + api_login + '/' + id)
-      return uri
-    end
-
-    def self.create_get_barrios_votes_url(id)
-      uri = build_uri('/api/locationgroup/' + api_login + '/' + id + '/totals/madrid_barrios')
-      return uri
-    end
-
-    def self.create_get_distritos_votes_url(id)
-      uri = build_uri('/api/locationgroup/' + api_login + '/' + id + '/totals/madrid_distritos')
-      return uri
     end
 
     def self.print_debug_start(description = "")
@@ -143,23 +69,19 @@ class EmapicApi
       puts "-"*60 + "\n\n\n"
     end
 
-    def self.api_host
-      Rails.application.secrets.emapic_api_host
+    def self.emapic_url
+      Rails.application.secrets.emapic_url
     end
 
-    def self.api_port
-      Rails.application.secrets.emapic_api_port
-    end
-
-    def self.api_key
+    def self.emapic_api_key
       Rails.application.secrets.emapic_api_key
     end
 
-    def self.api_secret
+    def self.emapic_api_secret
       Rails.application.secrets.emapic_api_secret
     end
 
-    def self.api_login
-      Rails.application.secrets.emapic_api_login
+    def self.emapic_login
+      Rails.application.secrets.emapic_login
     end
 end
