@@ -152,51 +152,97 @@
 
 <script>
 
-    var map,
-        indivLayer;
+
+    var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
+        landMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
+        indivLayer = L.geoJSON();
+        barriosLayer = L.geoJSON(),
+        distritosLayer = L.geoJSON(),
+        map = L.map('mapid', {
+          layers: [osmMap,indivLayer], // only add one!
+          scrollWheelZoom: false,
+          maxZoom: 18,
+          minZoom: 8
+        });
+
 
     function loadIndivLayer() {
-        $.getJSON('<%= map_indiv_votes_proposal_path(@proposal) %>', function(data) {
-            if (data.status != 'error') {
-              indivLayer.addData(data);
-              if (indivLayer.getLayers().length === 0) {
-                map.setView([40.4167, -3.7037], 13);
-              } else {
-                $('#mapid').show();
-                map.fitBounds(indivLayer.getBounds(),
-                {
-                    padding: [10, 10]
-                });
-              }
+      $.getJSON('<%= map_indiv_votes_proposal_path(@proposal) %>', function(data) {
+          if (data.status != 'error') {
+            indivLayer.addData(data);
+            if (indivLayer.getLayers().length === 0) {
+              map.setView([40.4167, -3.7037], 13);
+            } else {
+              $('#mapid').show();
+              map.fitBounds(indivLayer.getBounds(),
+              {
+                  padding: [10, 10]
+              });
             }
-        });
+          }
+      });
     }
 
-    function createMap() {
-
-      var osmMap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
-          landMap = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}');
-
-      map = L.map('mapid', {
-  	    layers: [osmMap], // only add one!
-        scrollWheelZoom: false,
-        maxZoom: 18,
-        minZoom: 8
+    function loadBarriosLayer() {
+      console.log('barrios...');
+      $.getJSON('<%= map_barrios_votes_proposal_path(@proposal) %>', function(data) {
+          console.log(data);
+          if (data.status != 'error') {
+            barriosLayer.addData(data);
+            if (barriosLayer.getLayers().length === 0) {
+              map.setView([40.4167, -3.7037], 13);
+            } else {
+              $('#mapid').show();
+              map.fitBounds(barriosLayer.getBounds(),
+              {
+                  padding: [10, 10]
+              });
+            }
+          }
       });
+    }
+
+    function loadDistritosLayer() {
+      console.log('distritos...');
+      $.getJSON('<%= map_distritos_votes_proposal_path(@proposal) %>', function(data) {
+          console.log(data);
+          if (data.status != 'error') {
+            distritosLayer.addData(data);
+            if (distritosLayer.getLayers().length === 0) {
+              map.setView([40.4167, -3.7037], 13);
+            } else {
+              $('#mapid').show();
+              map.fitBounds(distritosLayer.getBounds(),
+              {
+                  padding: [10, 10]
+              });
+            }
+          }
+      });
+    }
+
+
+    function createMap() {
 
     	var baseLayers = {
     		"OSM Mapnik": osmMap,
     		"Landscape": landMap
     	};
 
-    	L.control.layers(baseLayers).addTo(map);
+      var overlayMaps = {
+          "Individuales": indivLayer,
+          "Barrios": barriosLayer,
+          "Distritos": distritosLayer,
+      };
 
-      indivLayer = L.geoJSON().addTo(map);
+    	L.control.layers(baseLayers,overlayMaps).addTo(map);
     }
 
     $(function() {
       createMap();
       loadIndivLayer();
+      loadBarriosLayer();
+      loadDistritosLayer();
     });
 
 </script>

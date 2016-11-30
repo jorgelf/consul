@@ -83,6 +83,40 @@ class EmapicApi
     return response.body
   end
 
+  def self.get_barrios(id)
+    print_debug_start("to get the barrios JSON")
+
+    uri = build_uri('/api/locationgroup/' + id + '/totals/madrid_barrios')
+    http = build_http_object(uri)
+    puts "#{uri}"
+    request = Net::HTTP::Get.new(uri)
+    request.basic_auth(api_key, api_secret)
+
+    response = http.request(request)
+
+    ## puts "Response body: #{response.body}"
+    print_debug_end(response.code)
+
+    return response.body
+  end
+
+  def self.get_distritos(id)
+    print_debug_start("to get the distritos JSON")
+
+    uri = build_uri('/api/locationgroup/' + id + '/totals/madrid_distritos')
+    http = build_http_object(uri)
+    puts "#{uri}"
+    request = Net::HTTP::Get.new(uri)
+    request.basic_auth(api_key, api_secret)
+
+    response = http.request(request)
+
+    ## puts "Response body: #{response.body}"
+    print_debug_end(response.code)
+
+    return response.body
+  end
+
   def self.create_location_group(id, title)
     print_debug_start("to create a new proposal")
 
