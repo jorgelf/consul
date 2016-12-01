@@ -151,3 +151,13 @@
 </div>
 
 <script src="<%= Rails.application.secrets.emapic_url %>/javascripts/emapic_remote_loading.js" type="text/javascript"></script>
+<script src="<%= Rails.application.secrets.emapic_url %>/javascripts/emapic_get_user_coords.js" type="text/javascript"></script>
+<script>
+    emapic.btnSelector = 'a.button-support';
+    $(emapic.btnSelector).attr('disabled', true);
+    emapic.processUserLatLng = function(lat, lng)  {
+        var $btn = $(emapic.btnSelector),
+            href = $btn.attr('href');
+        $btn.attr('href', href + '&lat=' + lat + '&lng=' + lng);
+    };
+</script>

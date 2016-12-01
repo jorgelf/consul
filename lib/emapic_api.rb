@@ -32,6 +32,20 @@ class EmapicApi
     print_debug_end(response.code)
   end
 
+  def self.register_location(group_id, user_id, lat, lng)
+    print_debug_start("to register a vote with lat/lng")
+
+    uri = build_uri('/api/locationgroup/' + emapic_login + '/'  + group_id)
+    http = build_http_object(uri)
+    request = Net::HTTP::Post.new(uri)
+    request.basic_auth(emapic_api_key, emapic_api_secret)
+    request.set_form_data('usr_id': user_id, 'lat': lat, 'lng': lng)
+
+    response = http.request(request)
+
+    print_debug_end(response.code)
+  end
+
   def self.create_location_group(id, title)
     print_debug_start("to create a new proposal")
 

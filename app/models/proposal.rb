@@ -124,10 +124,12 @@ class Proposal < ActiveRecord::Base
     retired_at.present?
   end
 
-  def register_vote(user, vote_value)
+  def register_vote(user, vote_value, lat, lng)
     if votable_by?(user) && !archived?
       vote_by(voter: user, vote: vote_value)
-      EmapicApi.register_random_location('proposal_' + self.id.to_s, user.id.to_s)
+      if lat != nil && lng != nil
+          EmapicApi.register_location('proposal_' + self.id.to_s, nil, lat, lng)
+      end
     end
   end
 

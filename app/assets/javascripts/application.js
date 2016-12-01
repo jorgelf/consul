@@ -47,7 +47,6 @@
 //= require banners
 //= require social_share
 //= require custom
-//= require leaflet-src
 
 var initialize_modules = function() {
   App.Comments.initialize();

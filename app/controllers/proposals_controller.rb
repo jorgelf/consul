@@ -33,7 +33,7 @@ class ProposalsController < ApplicationController
   end
 
   def vote
-    @proposal.register_vote(current_user, 'yes')
+    @proposal.register_vote(current_user, 'yes', params[:lat], params[:lng])
     set_proposal_votes(@proposal)
   end
 
