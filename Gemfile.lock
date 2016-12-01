@@ -150,6 +150,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.6.3)
+    emapic_consul (0.1.5.3)
     errbase (0.0.3)
     erubis (2.7.0)
     execjs (2.7.0)
@@ -490,6 +491,7 @@ DEPENDENCIES
   devise-async
   devise_security_extension
   email_spec
+  emapic_consul (~> 0.1.5.3)
   factory_girl_rails
   faker
   foundation-rails (~> 6.2.4.0)

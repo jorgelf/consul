@@ -56,6 +56,7 @@ gem 'newrelic_rpm', '~> 3.17.0.325'
 gem 'whenever', require: false
 gem 'pg_search'
 gem 'http'
+gem 'emapic_consul', '~> 0.1.5.3'
 
 gem 'ahoy_matey', '~> 1.4.2'
 gem 'groupdate', '~> 3.1.0' # group temporary data
